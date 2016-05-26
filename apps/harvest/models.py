@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
+
 class Member(models.Model):
     CUSTOMER = 'CU'
     SUPPLIER = 'SP'
@@ -25,17 +26,18 @@ class Member(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
-
     def create_member(sender, instance, created, **kwargs):
-        """
-        if user is created (or changed),
-        then create user profile about the user, using signal
-
-        kwargs contains such key 'raw', 'signal', 'using'
-        """
-
         if created:
             # user is created, not changed
             Member.objects.create(user=instance)
 
     post_save.connect(create_member, sender=User)
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    category = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    stock = models.PositiveIntegerField(default=0)
+    user = models.ForeignKey(User)
+
