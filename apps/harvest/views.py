@@ -3,6 +3,8 @@ from django.views.generic import View
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.auth import forms, login, authenticate, logout
 
+from .forms import RegisterForm
+
 
 class ApplicationContext(object):
 
@@ -50,7 +52,7 @@ class Index(ApplicationView, View):
 
 
 class Register(View):
-    form = forms.UserCreationForm
+    form = RegisterForm
     context = ApplicationContext.context()
 
     def get(self, request):
