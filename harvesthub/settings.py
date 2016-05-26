@@ -128,3 +128,6 @@ STATICFILES_DIRS = (
 dotenv.read_dotenv(os.path.join(BASE_DIR, '.env'))
 FOO = (os.environ['FOO'])
 print(FOO)
+
+
+LOGIN_URL = '/harvest/login'

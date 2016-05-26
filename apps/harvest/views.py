@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.core.exceptions import ImproperlyConfigured
-from django.contrib.auth import forms
+from django.contrib.auth import forms, login, authenticate
 
 
 class ApplicationContext(object):
@@ -75,3 +75,32 @@ class RegisterSuccess(ApplicationView, View):
     context = ApplicationContext.context()
     # context['title'] =dd 'Welcome!'
     template = 'harvest/success.html'
+
+
+class Login(View):
+    form = forms.AuthenticationForm
+
+    def get(self, request):
+        print('login get')
+        context = {'form': self.form()}
+        print('context', context)
+        return render(request, 'harvest/login.html', context)
+
+    def post(self, request):
+        print('login post')
+        form = self.form(None, request.POST)
+        context = {'form': form}
+        print('form', form)
+        print('context', context)
+        print('is_valid', form.is_valid())
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('/harvest/success')
+            else:
+                return render(request, 'harvest/login.html', context)
+        else:
+            return render(request, 'harvest/login.html', context)
