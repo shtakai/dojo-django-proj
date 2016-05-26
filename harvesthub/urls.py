@@ -16,9 +16,10 @@ Including another URLconf
 from django.conf.urls import url, include, patterns
 from django.contrib import admin
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^admin/', admin.site.urls),
     url(r'^account/', include('apps.harvest.urls')),
     url(r'^harvest/', include('apps.harvest.urls')),
-    # url(r'^.*', include('apps.harvest.urls')),
+    url(r'^', include('apps.harvest.urls')),
 )

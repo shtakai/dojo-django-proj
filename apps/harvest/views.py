@@ -51,12 +51,13 @@ class Index(ApplicationView, View):
 
 class Register(View):
     form = forms.UserCreationForm
+    context = ApplicationContext.context()
 
     def get(self, request):
         print('register get')
-        context = {'form': self.form()}
-        print('context', context)
-        return render(request, 'harvest/register.html', context)
+        self.context['form'] = self.form()
+        print('context', self.context)
+        return render(request, 'harvest/register.html', self.context)
 
     def post(self, request):
         print('register post')
@@ -73,25 +74,25 @@ class Register(View):
 
 class RegisterSuccess(ApplicationView, View):
     context = ApplicationContext.context()
-    # context['title'] =dd 'Welcome!'
     template = 'harvest/success.html'
 
 
 class Login(View):
     form = forms.AuthenticationForm
+    context = ApplicationContext.context()
 
     def get(self, request):
         print('login get')
-        context = {'form': self.form()}
-        print('context', context)
-        return render(request, 'harvest/login.html', context)
+        self.context['form'] = self.form()
+        print('context', self.context)
+        return render(request, 'harvest/login.html', self.context)
 
     def post(self, request):
         print('login post')
         form = self.form(None, request.POST)
-        context = {'form': form}
+        self.context['form'] = form
         print('form', form)
-        print('context', context)
+        print('context', self.context)
         print('is_valid', form.is_valid())
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -101,9 +102,9 @@ class Login(View):
                 login(request, user)
                 return redirect('/harvest/success')
             else:
-                return render(request, 'harvest/login.html', context)
+                return render(request, 'harvest/login.html', self.context)
         else:
-            return render(request, 'harvest/login.html', context)
+            return render(request, 'harvest/login.html', self.context)
 
 
 class Logout(View):
