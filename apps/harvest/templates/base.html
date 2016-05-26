@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    {% load staticfiles %}
+    <script src="/static/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/static/lib/bootswatch-dist/js/bootstrap.min.js"></script>
+    <script src="/static/lib/underscore/underscore-min.js"></script>
+    <link rel="stylesheet" href="/static/lib/bootswatch-dist/css/bootstrap.min.css">
+
+    <title>{% block page_title %}{% endblock page_title %}</title>
+  </head>
+  <body>
+
+    <div class="navbar navbar-default ">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="../" class="navbar-brand">{% block brand %}{% endblock brand %}</a>
+          <a href="../" class="navbar-brand">{% block title %}{% endblock title %}</a>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+
+          <ul class="nav navbar-nav navbar-right">
+            {% for right in rightmenu%}
+            <li><a href="{{ right.url }}" >{{ right.title }}</a></li>
+            {% endfor %}
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+    {% if warnings %}
+    <div class="container">
+      <div class="row">
+        {% for warning in warnings %}
+        <div class="col-md-12">
+          <p class="bg-warning">{{ warning }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if infos %}
+    <div class="container">
+      <div class="row">
+        {% for info in infos %}
+        <div class="col-md-12">
+          <p class="bg-info">{{ info }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="container">
+      {% block content %}
+      {% endblock content%}
+    </div>
+  </body>
+</html>
