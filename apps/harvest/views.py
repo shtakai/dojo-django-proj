@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.core.exceptions import ImproperlyConfigured
-from django.contrib.auth import forms, login, authenticate
+from django.contrib.auth import forms, login, authenticate, logout
 
 
 class ApplicationContext(object):
@@ -104,3 +104,9 @@ class Login(View):
                 return render(request, 'harvest/login.html', context)
         else:
             return render(request, 'harvest/login.html', context)
+
+
+class Logout(View):
+    def get(self, request):
+        logout(request)
+        return redirect('/harvest/login')
