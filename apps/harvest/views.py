@@ -64,7 +64,7 @@ class Register(View):
     def post(self, request):
         print('register post')
         form = self.form(request.POST)
-        print('form', form)
+        print('User', form)
         print('isvalid', form.is_valid())
         if form.is_valid():
             form.save()
