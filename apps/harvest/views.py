@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.core.exceptions import ImproperlyConfigured
+from django.contrib.auth import forms
 
 
 class ApplicationContext(object):
@@ -46,3 +47,31 @@ class Index(ApplicationView, View):
     context = ApplicationContext.context()
     context['title'] = 'Welcome!'
     template = 'index.html'
+
+
+class Register(View):
+    form = forms.UserCreationForm
+
+    def get(self, request):
+        print('register get')
+        context = {'form': self.form()}
+        print('context', context)
+        return render(request, 'harvest/register.html', context)
+
+    def post(self, request):
+        print('register post')
+        form = self.form(request.POST)
+        print('form', form)
+        print('isvalid', form.is_valid())
+        if form.is_valid():
+            form.save()
+            return redirect('harvest/success')
+        else:
+            context = {'form': form}
+            return render(request, 'harvest/register.html', context)
+
+
+class RegisterSuccess(ApplicationView, View):
+    context = ApplicationContext.context()
+    # context['title'] =dd 'Welcome!'
+    template = 'harvest/success.html'
