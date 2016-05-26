@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from .models import Member
 
 
 class RegisterForm(UserCreationForm):
@@ -10,8 +11,12 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
             model = User
+            # model = Member
             fields = ('username', 'first_name', 'last_name',
                       'email', 'password1', 'password2')
+                     # 'address1', 'address2', 'city',
+                     # 'province', 'mobile', 'zipcode',
+                     # 'usertype')
 
     def save(self, commit=True):
         user = super(RegisterForm, self).save(commit=False)

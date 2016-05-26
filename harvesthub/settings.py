@@ -102,6 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_PROFILE_MODULE='apps.harvest.Member'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -127,7 +128,6 @@ STATICFILES_DIRS = (
 
 dotenv.read_dotenv(os.path.join(BASE_DIR, '.env'))
 FOO = (os.environ['FOO'])
-print(FOO)
 
 
 LOGIN_URL = '/harvest/login'
