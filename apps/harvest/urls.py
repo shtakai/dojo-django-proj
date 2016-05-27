@@ -37,5 +37,8 @@ urlpatterns = patterns(
     url(r'products/(?P<pk>[-_\w]+)$',
         login_required(views.ProductDetailView.as_view()),
         name='product-detail'),
+    url(r'products/(?P<pk>[-_\w]+)/delete$',
+        login_required(views.ProductDeleteView.as_view()),
+        name='product-delete'),
     url(r'^$', views.Index.as_view()),
 )
