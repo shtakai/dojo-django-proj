@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.auth import forms, login, authenticate, logout
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 
 from .forms import RegisterForm
 from .models import Product
@@ -88,6 +89,8 @@ class Register(View):
         print('isvalid', form.is_valid())
         if form.is_valid():
             form.save()
+            messages.add_message(self.request, messages.INFO,
+                                 'Registered Account. Please Log In')
             return redirect('/harvest/success')
         else:
             context = {'form': form}
@@ -132,6 +135,7 @@ class Login(View):
 class Logout(View):
     def get(self, request):
         logout(request)
+        messages.add_message(self.request, messages.INFO, 'Logged out. Thank you for using na ka!')
         return redirect('/')
 
 
@@ -188,6 +192,7 @@ class ProductCreateView(CreateView):
         self.object.user = self.request.user
         self.object.save()
         print('saved', self.object)
+        messages.add_message(self.request, messages.INFO, 'Created Product')
         return redirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
@@ -217,6 +222,7 @@ class ProductUpdateView(UpdateView):
         self.object = form.save(commit=False)
         # self.object.user = self.request.user
         self.object.save()
+        messages.add_message(self.request, messages.INFO, 'Updated Product')
         print('saved', self.object)
         return redirect(self.get_success_url())
 
@@ -224,5 +230,8 @@ class ProductUpdateView(UpdateView):
         print('ProductUpdateView#get_context_data', kwargs)
         context = super(ProductUpdateView, self).get_context_data(**kwargs)
         context.update(ApplicationContext.context(logged_in=True))
+        print('method', self.request.method)
+        if self.request.method == 'POST':
+            context['warnings'] = ['aaaaaaaa']
         print('context', context)
         return context

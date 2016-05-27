@@ -46,12 +46,12 @@
     </div>
     {% endif %}
 
-    {% if infos %}
+    {% if messages %}
     <div class="container">
       <div class="row">
-        {% for info in infos %}
+        {% for message in messages %}
         <div class="col-md-12">
-          <p class="bg-info">{{ info }}</p>
+          <p class="bg-info">{{ message }}</p>
         </div>
         {% endfor %}
       </div>
