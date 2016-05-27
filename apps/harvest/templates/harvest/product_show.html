@@ -24,14 +24,14 @@
   <div class="row">
     <div class="col-lg-12">
       <h1>product detail</h1>
-      <ul class='list-unstyled'>
-        <li>id: {{ object.id }}</li>
-        <li>name: {{ object.name }}</li>
-        <li>description: {{ object.description }}</li>
-        <li>category: {{ object.category }}</li>
-        <li>stock: {{ object.stock }}</li>
-        <li>price: {{ object.price }}</li>
-        <li><a href="/harvest/products" class="btn btn-primary">Back</a><li>
+      <ul class='list-unstyled list-group'>
+        <li class="list-group-item">id: {{ object.id }}</li>
+        <li class="list-group-item">name: {{ object.name }}</li>
+        <li class="list-group-item">description: {{ object.description }}</li>
+        <li class="list-group-item">category: {{ object.category }}</li>
+        <li class="list-group-item">stock: {{ object.stock }}</li>
+        <li class="list-group-item">price: {{ object.price }}</li>
+        <li class="list-group-item"><a href="/harvest/products" class="btn btn-primary">Back</a><li>
       </ul>
     </div>
   </div>
