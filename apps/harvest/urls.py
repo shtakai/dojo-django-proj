@@ -23,9 +23,13 @@ from . import views
 # ]
 urlpatterns = patterns(
     '',
-    url(r'login/', views.Login.as_view(), name='accounts-login'),
-    url(r'logout/', views.Logout.as_view(), name='accounts-logout'),
-    url(r'register/', views.Register.as_view(), name='accounts-register'),
-    url(r'success/', views.RegisterSuccess.as_view()),
+    url(r'login', views.Login.as_view(), name='accounts-login'),
+    url(r'logout', views.Logout.as_view(), name='accounts-logout'),
+    url(r'register', views.Register.as_view(), name='accounts-register'),
+    url(r'success', views.RegisterSuccess.as_view()),
+    url(r'dashboard', login_required(views.Dashboard.as_view()),
+        name='dashboard'),
+    url(r'products', login_required(views.ProductListView.as_view()),
+        name='product-list'),
     url(r'^$', views.Index.as_view()),
 )
