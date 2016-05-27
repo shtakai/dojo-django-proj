@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic import View
+from django.views.generic.list import ListView
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.auth import forms, login, authenticate, logout
 
 from .forms import RegisterForm
+from .models import Product
 
 
 class ApplicationContext(object):
@@ -68,7 +70,7 @@ class Register(View):
         print('isvalid', form.is_valid())
         if form.is_valid():
             form.save()
-            return redirect('harvest/success')
+            return redirect('/harvest/success')
         else:
             context = {'form': form}
             return render(request, 'harvest/register.html', context)
@@ -113,3 +115,23 @@ class Logout(View):
     def get(self, request):
         logout(request)
         return redirect('/harvest/login')
+
+
+class Dashboard(View):
+    def get(self, request):
+        print('Dashboard get', request)
+        return HttpResponse('DASHBOARD')
+
+
+class ProductListView(ListView):
+    model = Product
+    template_name = 'harvest/products.html'
+
+    def get_context_data(self, **kwargs):
+        # products = super(ProductListView, self).get_context_data(**kwargs)
+        context = {}
+        context.update(ApplicationContext.context())
+        context['product_list'] = Product.objects.filter(
+            user_id=self.request.user.id)
+        print('context:', context)
+        return context
