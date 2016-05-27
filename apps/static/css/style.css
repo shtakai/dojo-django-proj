@@ -1,0 +1,7 @@
+.jumbotron{
+  background-image: url('/static/img/jumbo.jpg');
+  color: white;
+  text-shadow: -2px 4px 0 rgba(0,0,0,0.3);
+}
+.jumbotron btn{
+}

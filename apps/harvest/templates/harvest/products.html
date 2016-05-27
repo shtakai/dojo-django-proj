@@ -1,0 +1,66 @@
+
+
+{% extends 'base.html'%}
+
+{% block page_title %}
+{{ page_title }}
+{% endblock page_title %}
+
+{% block brand %}
+{{ brand }}
+{% endblock brand %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block rightmenu %}
+{{ rightmenu }}
+{% endblock rightmenu %}
+
+
+{% block content %}
+<div class="bs-docs-section">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>products</h1>
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>description</th>
+            <th>stock</th>
+            <th>price</th>
+            <th>action</th>
+          </tr>
+        </thead>
+        <tbody>
+      {% for product in product_list %}
+          <tr>
+            <td>
+              <a href="/harvest/products/{{ product.id }}">{{ product.id }}</a>
+            </td>
+            <td>
+              {{ product.name }}
+            </td>
+            <td>
+              {{ product.description }}
+            </td>
+            <td>
+              {{ product.stock }}
+            </td>
+            <td>
+              {{ product.price }}
+            </td>
+            <td>
+            </td>
+          </tr>
+      {% endfor %}
+        </tbody>
+      </table>
+      <a href="/harvest/products/create" class="btn btn-primary">Create Product</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

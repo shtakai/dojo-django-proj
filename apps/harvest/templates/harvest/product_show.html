@@ -1,0 +1,38 @@
+
+
+{% extends 'base.html'%}
+
+{% block page_title %}
+{{ page_title }}
+{% endblock page_title %}
+
+{% block brand %}
+{{ brand }}
+{% endblock brand %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block rightmenu %}
+{{ rightmenu }}
+{% endblock rightmenu %}
+
+
+{% block content %}
+<div class="bs-docs-section">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>product detail</h1>
+      <ul class='list-unstyled'>
+        <li>id: {{ object.id }}</li>
+        <li>name: {{ object.name }}</li>
+        <li>description: {{ object.description }}</li>
+        <li>category: {{ object.category }}</li>
+        <li>stock: {{ object.stock }}</li>
+        <li><a href="/harvest/products" class="btn btn-primary">Back</a><li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
