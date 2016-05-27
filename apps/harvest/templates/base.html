@@ -1,3 +1,4 @@
+{% load bootstrap3 %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -34,29 +35,7 @@
       </div>
     </div>
 
-    {% if warnings %}
-    <div class="container">
-      <div class="row">
-        {% for warning in warnings %}
-        <div class="col-md-12">
-          <p class="bg-warning">{{ warning }}</p>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    {% endif %}
-
-    {% if messages %}
-    <div class="container">
-      <div class="row">
-        {% for message in messages %}
-        <div class="col-md-12">
-          <p class="bg-info">{{ message }}</p>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    {% endif %}
+    {% bootstrap_messages %}
 
     <div class="container">
       {% block content %}
