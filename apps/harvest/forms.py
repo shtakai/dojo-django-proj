@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Member
+from .models import Member, Product
 
 
 class RegisterForm(UserCreationForm):
@@ -56,3 +56,11 @@ class RegisterForm(UserCreationForm):
             # member.user_id = user.id
             # member.save()
             return user
+
+
+# class ProductForm(forms.Form):
+    # name = forms.CharField(label='Name')
+    # description = forms.CharField(label='Description')
+    # category = forms.CharField(label='Category')
+    # stock = forms.IntegerField(label='Stock')
+    # image = forms.ImageField(label='Image')

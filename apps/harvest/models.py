@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from django.core.urlresolvers import reverse
 import os
 import uuid
 
@@ -42,10 +43,13 @@ class Product(models.Model):
     description = models.CharField(max_length=255)
     stock = models.PositiveIntegerField(default=0)
     user = models.ForeignKey(User)
-    image = models.ImageField(upload_to='images/')
+    # image = models.ImageField(upload_to='images/')
 
-    def get_image_path(self, filename):
-        prefix = 'images/'
-        name = str(uuid.uuid4()).replace('-', '')
-        extension = os.path.splitext(filename)[-1]
-        return prefix + name + extension
+    # def get_image_path(self, filename):
+        # prefix = 'images/'
+        # name = str(uuid.uuid4()).replace('-', '')
+        # extension = os.path.splitext(filename)[-1]
+        # return prefix + name + extension
+
+    def get_absolute_url(self):
+        return reverse('products:detail', kwargs={'pk': self.pk})

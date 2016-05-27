@@ -5,6 +5,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.auth import forms, login, authenticate, logout
+from django.core.urlresolvers import reverse
 
 from .forms import RegisterForm
 from .models import Product
@@ -13,14 +14,20 @@ from .models import Product
 class ApplicationContext(object):
 
     @classmethod
-    def context(cls):
-        return {
-            'title': '',
-            'brand': 'harVestHub',
-            'page_title': 'harVestHub',
-            'warnings': [],
-            'infos': [],
-            'rightmenu': [
+    def context(cls, user=None):
+        if user:
+            rightmenu = [
+                {
+                    'url': '/harvest/logout',
+                    'title': 'Login',
+                },
+                {
+                    'url': '/harvest/register',
+                    'title': 'Register',
+                },
+            ]
+        else:
+            rightmenu = [
                 {
                     'url': '/harvest/login',
                     'title': 'Login',
@@ -29,7 +36,15 @@ class ApplicationContext(object):
                     'url': '/harvest/register',
                     'title': 'Register',
                 },
-            ],
+            ]
+
+        return {
+            'title': '',
+            'brand': 'harVestHub',
+            'page_title': 'harVestHub',
+            'warnings': [],
+            'infos': [],
+            'rightmenu': rightmenu
         }
 
 
@@ -129,12 +144,13 @@ class ProductListView(ListView):
     model = Product
     template_name = 'harvest/products.html'
 
+    def get_queryset(self):
+        print('user', self.request.user.id)
+        return Product.objects.filter(user_id=self.request.user.id)
+
     def get_context_data(self, **kwargs):
-        # products = super(ProductListView, self).get_context_data(**kwargs)
-        context = {}
+        context = super(ProductListView, self).get_context_data(**kwargs)
         context.update(ApplicationContext.context())
-        context['product_list'] = Product.objects.filter(
-            user_id=self.request.user.id)
         print('context:', context)
         return context
 
@@ -143,12 +159,38 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'harvest/product_show.html'
 
+    def get_queryset(self):
+        return Product.objects.filter(user_id=self.request.user.id)
+
     def get_context_data(self, **kwargs):
         print('ProductDetailView get_context_data')
         context = super(ProductDetailView, self).get_context_data(**kwargs)
-        if context['object'].user_id != self.request.user.id:
-            print('not owner', context['object'])
-            context['object'] = {}
         context.update(ApplicationContext.context())
         print('context', context)
         return context
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    fields = ['name', 'description', 'category', 'stock']
+    # form_class = ProductForm
+
+    def get_success_url(self):
+        print('ProductCreateView#get_success_url')
+        print('object.id', self.object.id)
+        return "harvest/products/{}".format(self.object.id)
+
+    def form_valid(self, form):
+        print('ProductCreateView#form_valid', form)
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        print('saved', self.object)
+        return redirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        print('ProductCreateView#get_context_data', kwargs)
+        context = super(ProductCreateView, self).get_context_data(**kwargs)
+        print('context', context)
+        return context
+

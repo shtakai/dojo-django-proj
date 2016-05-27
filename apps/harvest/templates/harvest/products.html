@@ -39,7 +39,7 @@
       {% for product in product_list %}
           <tr>
             <td>
-              {{ product.id }}
+              <a href="/harvest/products/{{ product.id }}">{{ product.id }}</a>
             </td>
             <td>
               {{ product.name }}
@@ -59,6 +59,7 @@
       {% endfor %}
         </tbody>
       </table>
+      <a href="/harvest/products/create" class="btn btn-primary">Create Product</a>
     </div>
   </div>
 </div>
