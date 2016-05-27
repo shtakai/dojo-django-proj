@@ -54,6 +54,8 @@
               {{ product.price }}
             </td>
             <td>
+              <a href="/harvest/products/{{ product.id }}/update" class="btn btn-sm btn-primary">Edit</a>
+              <a href="/harvest/products/{{ product.id }}/delete" class="btn btn-sm btn-danger">Delete</a>
             </td>
           </tr>
       {% endfor %}

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.auth import forms, login, authenticate, logout
 from django.core.urlresolvers import reverse
@@ -202,3 +202,27 @@ class ProductDeleteView(DeleteView):
     model = Product
     success_url = '/harvest/products'
 
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = ['name', 'description', 'category', 'stock', 'price']
+
+    def get_success_url(self):
+        print('ProductCreateView#get_success_url')
+        print('object.id', self.object.id)
+        return "harvest/products/{}".format(self.object.id)
+
+    def form_valid(self, form):
+        print('ProductCreateView#form_valid', form)
+        self.object = form.save(commit=False)
+        # self.object.user = self.request.user
+        self.object.save()
+        print('saved', self.object)
+        return redirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        print('ProductUpdateView#get_context_data', kwargs)
+        context = super(ProductUpdateView, self).get_context_data(**kwargs)
+        context.update(ApplicationContext.context(logged_in=True))
+        print('context', context)
+        return context
