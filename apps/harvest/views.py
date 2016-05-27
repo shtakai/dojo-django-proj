@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.auth import forms, login, authenticate, logout
 from django.core.urlresolvers import reverse
@@ -14,11 +14,12 @@ from .models import Product
 class ApplicationContext(object):
 
     @classmethod
-    def context(cls, user=None):
-        if user:
+    def context(cls, logged_in=False):
+        print('login?', logged_in)
+        if not logged_in:
             rightmenu = [
                 {
-                    'url': '/harvest/logout',
+                    'url': '/harvest/login',
                     'title': 'Login',
                 },
                 {
@@ -29,12 +30,12 @@ class ApplicationContext(object):
         else:
             rightmenu = [
                 {
-                    'url': '/harvest/login',
-                    'title': 'Login',
+                    'url': '/harvest/products',
+                    'title': 'Dashboard',
                 },
                 {
-                    'url': '/harvest/register',
-                    'title': 'Register',
+                    'url': '/logout',
+                    'title': 'Logout',
                 },
             ]
 
@@ -121,7 +122,7 @@ class Login(View):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/harvest/success')
+                return redirect('/harvest/products')
             else:
                 return render(request, 'harvest/login.html', self.context)
         else:
@@ -131,7 +132,7 @@ class Login(View):
 class Logout(View):
     def get(self, request):
         logout(request)
-        return redirect('/harvest/login')
+        return redirect('/')
 
 
 class Dashboard(View):
@@ -150,7 +151,8 @@ class ProductListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
-        context.update(ApplicationContext.context())
+        context.update(ApplicationContext.context(logged_in=True))
+
         print('context:', context)
         return context
 
@@ -165,14 +167,14 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         print('ProductDetailView get_context_data')
         context = super(ProductDetailView, self).get_context_data(**kwargs)
-        context.update(ApplicationContext.context())
+        context.update(ApplicationContext.context(logged_in=True))
         print('context', context)
         return context
 
 
 class ProductCreateView(CreateView):
     model = Product
-    fields = ['name', 'description', 'category', 'stock']
+    fields = ['name', 'description', 'category', 'stock', 'price']
     # form_class = ProductForm
 
     def get_success_url(self):
@@ -191,6 +193,12 @@ class ProductCreateView(CreateView):
     def get_context_data(self, **kwargs):
         print('ProductCreateView#get_context_data', kwargs)
         context = super(ProductCreateView, self).get_context_data(**kwargs)
+        context.update(ApplicationContext.context(logged_in=True))
         print('context', context)
         return context
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = '/harvest/products'
 
