@@ -42,6 +42,7 @@ class Product(models.Model):
     category = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     stock = models.PositiveIntegerField(default=0)
+    price = models.PositiveIntegerField(default=0)
     user = models.ForeignKey(User)
     # image = models.ImageField(upload_to='images/')
 
