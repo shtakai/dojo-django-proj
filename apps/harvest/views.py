@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic import View
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.auth import forms, login, authenticate, logout
 
@@ -134,4 +136,19 @@ class ProductListView(ListView):
         context['product_list'] = Product.objects.filter(
             user_id=self.request.user.id)
         print('context:', context)
+        return context
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'harvest/product_show.html'
+
+    def get_context_data(self, **kwargs):
+        print('ProductDetailView get_context_data')
+        context = super(ProductDetailView, self).get_context_data(**kwargs)
+        if context['object'].user_id != self.request.user.id:
+            print('not owner', context['object'])
+            context['object'] = {}
+        context.update(ApplicationContext.context())
+        print('context', context)
         return context

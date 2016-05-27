@@ -29,7 +29,10 @@ urlpatterns = patterns(
     url(r'success', views.RegisterSuccess.as_view()),
     url(r'dashboard', login_required(views.Dashboard.as_view()),
         name='dashboard'),
-    url(r'products', login_required(views.ProductListView.as_view()),
+    url(r'^products$', login_required(views.ProductListView.as_view()),
         name='product-list'),
+    url(r'products/(?P<pk>[-_\w]+)$',
+        login_required(views.ProductDetailView.as_view()),
+        name='product-detail'),
     url(r'^$', views.Index.as_view()),
 )
