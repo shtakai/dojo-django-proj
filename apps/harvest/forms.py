@@ -4,20 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Member
 
 
-# class MemberForm(forms.Form):
-    # department = forms.CharField(label='Department', max_length=100)
-
-    # class Meta:
-        # model = Member
-        # fields = ('department')
-
-    # def save(self, userid):
-        # member = Member()
-        # member.department = self.cleaned_data['department']
-        # member.save()
-        # return member
-
-
 class RegisterForm(UserCreationForm):
     CUSTOMER = 'CU'
     SUPPLIER = 'SP'
